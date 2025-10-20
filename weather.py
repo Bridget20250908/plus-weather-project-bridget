@@ -141,24 +141,48 @@ def generate_summary(weather_data):
     The average low this week is 12.2°C.
     The average high this week is 17.8°C.
     """
+    result_string = ""
+    day_count = len(weather_data)
+    low_temp_list = []
+    high_temp_list = []
+    date_list = []
+
     for i in weather_data:
-        lowest_temp = min(weather_data)
-        min_index = weather_data.index(lowest_temp)
-        lowest_date = convert_date(weather_data[min_index[0]])
+        low_temp = i[1]
+        low_temp_list.append(low_temp)
+        high_temp = i[2]
+        high_temp_list.append(high_temp)
+        date = i[0]
+        date_list.append(date)
 
-        highest_temp = max(weather_data)
+    lowest_temp = min(low_temp_list)
+    lowest_temp_string = format_temperature(convert_f_to_c(lowest_temp))
+    lowest_temp_index = low_temp_list.index(lowest_temp)
+    lowest_temp_date = convert_date(date_list[lowest_temp_index])
+    average_low_temp = calculate_mean(low_temp_list)
+    average_low_temp_string = format_temperature(
+        convert_f_to_c(average_low_temp))
+    highest_temp = max(high_temp_list)
+    highest_temp_string = format_temperature(convert_f_to_c(highest_temp))
+    highest_temp_index = high_temp_list.index(highest_temp)
+    highest_temp_date = convert_date(date_list[highest_temp_index])
+    average_high_temp = calculate_mean(high_temp_list)
+    average_high_temp_string = format_temperature(
+        convert_f_to_c(average_high_temp))
 
-        lowest_temp_date = weather_data.index(lowest_temp)
-
-        highest_temp_date = weather_data.index(highest_temp)
-
-        average_low = calculate_mean(weather_data)
-        average_high = calculate_mean(weather_data)
-
-        multi_string = """
-"""
-
-        return (f"5 Day Overview\n The lowest temperatur will be {lowest_temp}, {DEGREE_SYMBOL}, and will occur on {lowest_temp_date}.\n The highest temperature will be {highest_temp}, {DEGREE_SYMBOL}, and will occur on {highest_temp_date}.\n The average low this week is {average_low}, {DEGREE_SYMBOL}.\n The average high this week is {average_high}, {DEGREE_SYMBOL}\n")
+    result_string += f"{day_count} Day Overview\n"
+    result_string += f"  The lowest temperature will be {lowest_temp_string}, and will occur on {lowest_temp_date}.\n"
+    result_string += f"  The highest temperature will be {highest_temp_string}, and will occur on {highest_temp_date}.\n"
+    result_string += f"  The average low this week is {average_low_temp_string}.\n"
+    result_string += f"  The average high this week is {average_high_temp_string}.\n"
+    return result_string
+    # print(f"5 Day Overview")
+    # print(
+    #     "The lowest temperature will be {lowest_temp} {DEGREE_SYMBOL},and will occur on {lowest_temp_date}")
+    # print(
+    #     "The highest temperature will be {hightest_temp}{DEGREE_SYMBOL}, and will occur on {highest_temp_date}")
+    # print("The average low his week is {average_low_temp}")
+    # print("The average high this week is {average_high_temp} ")
 
 
 def generate_daily_summary(weather_data):
