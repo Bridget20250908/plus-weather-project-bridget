@@ -78,12 +78,10 @@ def load_data_from_csv(csv_file):
     with open(csv_file) as file:
         reader = csv.reader(file)
         next(reader)
-        count = 0
-    for row in reader:
-        count = count+1
-        return count
-    for i in count:
-        list[i] = row[i]
+        list = []
+        for row in reader:
+            if row:
+                list.append([row[0], int(row[1]), int(row[2])])
         return list
 
 
@@ -104,7 +102,6 @@ def find_min(weather_data):
         min_value = min(weather_data)
         min_last_index = max(i for i, x in enumerate(
             weather_data) if x == min_value)
-        # min_index = weather_data.index(min_value)
     return (float(min_value), min_last_index)
 
 
@@ -183,6 +180,8 @@ def generate_summary(weather_data):
     #     "The highest temperature will be {hightest_temp}{DEGREE_SYMBOL}, and will occur on {highest_temp_date}")
     # print("The average low his week is {average_low_temp}")
     # print("The average high this week is {average_high_temp} ")
+    # test = " 5 day Summar \n"
+    # print(f"test")
 
 
 def generate_daily_summary(weather_data):
@@ -193,6 +192,33 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
+# ---- Friday 02 July 2021 ----
+#   Minimum Temperature: 9.4°C
+#   Maximum Temperature: 19.4°C
 
+# ---- Saturday 03 July 2021 ----
+#   Minimum Temperature: 13.9°C
+#   Maximum Temperature: 20.0°C
 
-pass
+    if not weather_data:
+        return ()
+    count = 0
+    return_string = ""
+    date_list = []
+    low_temp_list = []
+    high_temp_list = []
+
+    for i in weather_data:
+        count += 1
+        date = i[0]
+        date_list.append(date)
+        low_temp = i[1]
+        low_temp_list.append(low_temp)
+        high_temp = i[2]
+        high_temp_list.append(high_temp)
+
+        return_string += f"---- {convert_date(date)} ----\n"
+        return_string += f"  Minimum Temperature: {format_temperature(convert_f_to_c(low_temp))}\n"
+        return_string += f"  Maximum Temperature: {format_temperature(convert_f_to_c(high_temp))}\n"
+        return_string += f"\n"
+    return return_string

@@ -1,62 +1,78 @@
-def generate_summary(weather_data):
-    """Outputs a summary for the given weather data.
+from datetime import datetime
+
+
+def convert_date(iso_string):
+    """Converts and ISO formatted date into a human-readable format.
+
+    Args:
+        iso_string: An ISO date string.
+    Returns:
+        A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
+    """
+
+    date_object = datetime.fromisoformat(iso_string)
+    date_string = date_object.strftime("%A %d %B %Y")
+
+    return date_string
+
+
+def convert_f_to_c(temp_in_fahrenheit):
+    """Converts a temperature from Fahrenheit to Celcius.
+
+    Args:
+        temp_in_fahrenheit: float representing a temperature.
+    Returns:
+        A float representing a temperature in degrees Celcius, rounded to 1 decimal place.
+    """
+    temp_in_celcisu = (float(temp_in_fahrenheit) - 32) * 5 / 9
+
+    return round(temp_in_celcisu, 1)
+
+
+def generate_daily_summary(weather_data):
+    """Outputs a daily summary for the given weather data.
 
     Args:
         weather_data: A list of lists, where each sublist represents a day of weather data.
     Returns:
-        A string containing the summary information:
-
-        5 Day Overview
-    The lowest temperature will be 9.4°C, and will occur on Friday 02 July 2021.
-    The highest temperature will be 20.0°C, and will occur on Saturday 03 July 2021.
-    The average low this week is 12.2°C.
-    The average high this week is 17.8°C.
+        A string containing the summary information.
     """
+# ---- Friday 02 July 2021 ----
+#   Minimum Temperature: 9.4°C
+#   Maximum Temperature: 19.4°C
+
+# ---- Saturday 03 July 2021 ----
+#   Minimum Temperature: 13.9°C
+#   Maximum Temperature: 20.0°C
+
+    count = 0
+    return_string = {}
+    date_list = []
     low_temp_list = []
     high_temp_list = []
 
     for i in weather_data:
+        count += 1
+        date = i[0]
+        date_list.append(date)
         low_temp = i[1]
         low_temp_list.append(low_temp)
         high_temp = i[2]
         high_temp_list.append(high_temp)
-    lowest_temp = min(low_temp_list)
-    lowest_temp_index = low_temp_list.index(lowest_temp)
-    average_low_temp = calculate_mean(low_temp_list)
-    highest_temp = max(high_temp_list)
-    highest_temp_index = high_temp_list.index(highest_temp)
-    average_high_temp = calculate_mean(high_temp_list)
-    print(
-        f"5 Day Overview\n The lowest temperatur will be {lowest_temp}, and will occur on {lowest_temp_index}.")
+
+        return_string += f"----{convert_date(date_list[i])}----\n"
+        return_string += f" Minimum Temperature: {convert_f_to_c(low_temp_list[i])}\n"
+        return_string += f" Maxmum Temperature: {convert_f_to_c(high_temp_list[i])}\n"
+        return_string += f"\n"
+        return return_string
 
 
-def calculate_mean(weather_data):
-    """Calculates the mean value from a list of numbers.
+weather_data = [
+    ["2021-07-02T07:00:00+08:00", 49, 67],
+    ["2021-07-03T07:00:00+08:00", 57, 68],
+    ["2021-07-04T07:00:00+08:00", 56, 62],
+    ["2021-07-05T07:00:00+08:00", 55, 61],
+    ["2021-07-06T07:00:00+08:00", 53, 62]
+]
 
-    Args:
-        weather_data: a list of numbers.
-    Returns:
-        A float representing the mean value.
-    """
-    weather_data_sum = 0
-    for i in weather_data:
-        weather_data_sum = weather_data_sum+float(i)
-    if len(weather_data) != 0:
-        mean = weather_data_sum / len(weather_data)
-        return mean
-    else:
-        return f"No Weather Data Found"
-
-
-    #     min_index = weather_data.index(lowest_temp)
-    #     lowest_date = weather_data[min_index[0]]
-    # return (lowest_date, lowest_temp)
-weather_data = [["2020-06-19T07:00:00+08:00", -7, 10],
-                ["2020-06-20T07:00:00+08:00", -51, 67],
-                ["2020-06-21T07:00:00+08:00", 58, 72],
-                ["2020-06-22T07:00:00+08:00", 59, 71],
-                ["2020-06-23T07:00:00+08:00", -52, 71],
-                ["2020-06-24T07:00:00+08:00", 52, 67],
-                ["2020-06-25T07:00:00+08:00", -48, 66],
-                ["2020-06-26T07:00:00+08:00", 53, 66]]
-print(generate_summary(weather_data))
+print(generate_daily_summary(weather_data))
