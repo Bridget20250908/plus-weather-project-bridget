@@ -138,6 +138,8 @@ def generate_summary(weather_data):
     The average low this week is 12.2°C.
     The average high this week is 17.8°C.
     """
+    if not weather_data:
+        return ()
     result_string = ""
     day_count = len(weather_data)
     low_temp_list = []
